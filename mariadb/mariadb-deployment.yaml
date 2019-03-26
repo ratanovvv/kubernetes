@@ -1,0 +1,37 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.16.0 (0c01309)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: sample-mariadb
+  name: sample-mariadb
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: sample-mariadb
+    spec:
+      containers:
+      - image: haproxy:1.7
+        name: sample-mariadb
+        ports:
+        - containerPort: 3306
+        - containerPort: 80
+        volumeMounts:
+          - mountPath: /usr/local/etc/haproxy
+            name: haproxy-cfg          
+        resources: {}
+      volumes:
+      - name: haproxy-cfg
+        secret:
+          secretName: sample-mariadb-secret
+      hostname: sample-mariadb
+      restartPolicy: Always
+status: {}

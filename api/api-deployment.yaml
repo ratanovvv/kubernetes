@@ -1,0 +1,84 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.16.0 (0c01309)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: sample-api
+  name: sample-api
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: sample-api
+    spec:
+      containers:
+      - env:
+        - name: APP_NAME
+          value: smaple-api
+        - name: APP_ENV
+          value: development
+        - name: APP_KEY
+          valueFrom:
+            secretKeyRef:
+              name: sample-api-secret
+              key: app_key
+        - name: APP_DEBUG
+          value: "true"
+        - name: APP_LOG_LEVEL
+          value: debug
+        - name: APP_URL
+          valueFrom:
+            secretKeyRef:
+              name: sample-api-secret
+              key: app_url
+        - name: DB_CONNECTION
+          valueFrom:
+            secretKeyRef:
+              name: sample-api-secret
+              key: db_connection
+        - name: DB_HOST
+          valueFrom:
+            secretKeyRef:
+              name: sample-api-secret
+              key: db_host
+        - name: DB_PORT
+          valueFrom:
+            secretKeyRef:
+              name: sample-api-secret
+              key: db_port
+        - name: DB_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: sample-api-secret
+              key: db_database
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: sample-api-secret
+              key: db_username
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: sample-api-secret
+              key: db_password
+        - name: MAIL_DRIVER
+          value: smtp
+        - name: MAIL_HOST
+          value: smtp.mail.site
+        image: 172.16.0.150:18080/sample-api:SNAPSHOT
+        imagePullPolicy: Always
+        name: sample-api
+        ports:
+        - containerPort: 80
+        resources: {}
+      hostname: sample-api
+      restartPolicy: Always
+      imagePullSecrets:
+      - name: jenkins-regcred
+status: {}

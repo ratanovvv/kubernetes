@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.16.0 (0c01309)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: sample-mariadb
+  name: sample-mariadb
+spec:
+  ports:
+  - name: "3307"
+    port: 3307
+    targetPort: 3306
+    nodePort: 31006
+  - name: "3380"
+    port: 3380
+    targetPort: 80
+  selector:
+    io.kompose.service: sample-mariadb
+  type: NodePort
+status:
+  loadBalancer: {}
